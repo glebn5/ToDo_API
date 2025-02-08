@@ -136,3 +136,40 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+
+# Директория сборки
+/dist/
+
+# Директория Node.js модулей
+/node_modules/
+
+# Файлы IDE
+/.idea/
+/.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Файлы операционной системы
+.DS_Store
+Thumbs.db
+
+# Конфигурационные файлы npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Персональные конфигурационные файлы
+.env
+.env.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+
+# Файлы временных данных
+.cache/
+.eslintcache
+
+# Локальные настройки Babel
+babel.config.js
