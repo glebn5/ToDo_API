@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
 
@@ -130,24 +130,37 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'todo.authentication.CookieJWTAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'todo.authentication.CookieJWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',                
+    ],
+    'DATETIME_FORMAT': '%H:%M:%S %Y-%m-%d',  # Пример: 2025-01-29 19:54:45
+    'DATE_FORMAT': '%Y-%m-%d',               # Пример: 2025-01-29
+    'TIME_FORMAT': '%H:%M:%S',     
 }
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8080",  # Замените на ваш frontend URL
+]
+
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",  # Замените на ваш домен и порт
+    "http://127.0.0.1:8000",
+    "http://localhost:8080"  # Замените на ваш домен и порт
 ]
 CORS_ALLOW_CREDENTIALS = True
 
+CSRF_COOKIE_SECURE = False  # Если используете HTTPS, установите True
+SESSION_COOKIE_SECURE = False 
+
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Жизненный цикл access-токена
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),   # Жизненный цикл refresh-токена
-    'ROTATE_REFRESH_TOKENS': True,                 # Автоматическое обновление refresh-токена
-    'BLACKLIST_AFTER_ROTATION': True,              # Добавление старого refresh-токена в черный список
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=360),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
-# Настройки для работы с куками
-SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = True
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'access_token'
+JWT_AUTH_REFRESH_COOKIE = 'refresh_token'
